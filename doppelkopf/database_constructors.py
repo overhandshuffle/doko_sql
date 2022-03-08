@@ -10,6 +10,7 @@ class User(db.Model):
     username = db.Column("username", db.String(100), nullable=False)
     password = db.Column("password", db.String(100), nullable=True)
     email = db.Column("email", db.String(100), nullable=True)
+    added_from= db.Column("added_from", db.Integer, nullable=True)
     def __repr__(self):
         return '<User %r>' % self.username
 
@@ -51,3 +52,4 @@ class RoundsXPlayer(db.Model):
     schweine = db.Column("schweine", db.String)
     armut = db.Column("armut", db.Integer)
     solotyp = db.Column("solotyp", db.String)
+

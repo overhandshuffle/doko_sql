@@ -1,7 +1,8 @@
 
 from flask import render_template, url_for, flash, redirect, jsonify, request
+from flask_api import status
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required, get_jwt, JWTManager, decode_token
-from doppelkopf import create_game, jwt_login, database_constructors, player, app
+from doppelkopf import create_game, jwt_login, database_constructors, player, app, append_round, game_state
 import datetime
 
 
@@ -25,6 +26,17 @@ def login():
 def create_game():
     players = request.json
     return jsonify(create_game.create(players))
+
+
+@app.route('/game/<gameId>', methods=["GET", "POST"])
+@jwt_required()
+def game(gameId):
+    if request.method == 'POST':
+        content = request.json
+        if not append_round.append(content, gameId):
+            return "gameID not found", status.HTTP_400_BAD_REQUEST
+
+    return jsonify(game_state.game_state(gameId))
 
 
 @app.route('/namelist/<name>', methods=["GET"])
